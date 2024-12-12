@@ -228,11 +228,11 @@ class GeneralGame:
         button_frame.pack()
 
         score_options = {
-            'Uns 🎯': self.score_ones,
+            'Um 🎯': self.score_ones,
             'Dois 🎯': self.score_twos,
             'Três 🎯': self.score_threes,
-            'Quatros 🎯': self.score_fours,
-            'Cincos 🎯': self.score_fives,
+            'Quatro 🎯': self.score_fours,
+            'Cinco 🎯': self.score_fives,
             'Seis 🎯': self.score_sixes,
             'Sequência Baixa 🔄': self.score_low_straight,
             'Sequência Alta 🔄': self.score_high_straight,
