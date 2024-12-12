@@ -1,5 +1,5 @@
-import tkinter as tk
-from tkinter import ttk, messagebox
+import tkinter as tk 
+from tkinter import ttk, messagebox 
 import random
 from PIL import Image, ImageTk
 import os
