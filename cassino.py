@@ -35,7 +35,7 @@ def rodar_slots():
 # Criando a janela principal
 root = tk.Tk()
 root.title("Máquina de Cassino 🎰")
-root.geometry("400x350")
+root.geometry("1200x900")
 root.configure(bg="black")
 
 # Título do jogo
@@ -57,15 +57,15 @@ label_slot3 = tk.Label(frame_slots, text="?", font=("Arial", 30), bg="white", wi
 label_slot3.pack(side=tk.LEFT, padx=5)
 
 # Legenda dos símbolos
-label_legenda = tk.Label(root, text="Símbolos possíveis: 🍒, 🍋, 🔔, 🍉, ⭐, 💎", font=("Arial", 12), bg="black", fg="white")
+label_legenda = tk.Label(root, text="Símbolos possíveis: 🍒, 🍋, 🔔, 🍉, ⭐, 💎", font=("Comic Sans MS", 30), bg="black", fg="white")
 label_legenda.pack(pady=5)
 
 # Botão para puxar a alavanca
-botao_jogar = tk.Button(root, text="Puxar Alavanca 🎲", font=("Arial", 16), bg="green", fg="white", command=rodar_slots)
+botao_jogar = tk.Button(root, text="Puxar Alavanca 🎲", font=("Arial", 24), bg="green", fg="white", command=rodar_slots)
 botao_jogar.pack(pady=20)
 
 # Label para exibir o resultado
-label_resultado = tk.Label(root, text="Boa sorte!", font=("Arial", 16), bg="black", fg="white")
+label_resultado = tk.Label(root, text="Boa sorte!", font=("Arial", 32), bg="black", fg="white")
 label_resultado.pack(pady=10)
 
 # Loop principal

@@ -2,7 +2,7 @@ import tkinter as tk
 
 root = tk.Tk()
 root.title("Interatividade em Tkinter 🖱️")
-root.geometry("400x300")
+root.geometry("800x600")
 root.configure(bg="lightyellow")
 
 def atualizar_label(event):
@@ -10,8 +10,6 @@ def atualizar_label(event):
 
 def botao_clicado():
 	print("Botão clicado! 🎉")
-
-root.bind("<Key>", atualizar_label)
 
 label_instrucao = tk.Label(root, text="Pressione uma tecla ou clique no botão!", font=("Arial", 14), bg="lightyellow")
 label_instrucao.pack(pady=10)
