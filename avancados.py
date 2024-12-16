@@ -1,80 +1,79 @@
-# Importing the tkinter library which is used for creating GUI applications
+# Importando a biblioteca tkinter que é usada para criar aplicativos GUI
 import tkinter as tk
-# Importing ttk module from tkinter for themed widgets
+# Importando o módulo ttk do tkinter para widgets temáticos
 from tkinter import ttk
 
-# Creating the main application window
+# Criando a janela principal do aplicativo
 root = tk.Tk()
-# Setting the title of the window
+# Definindo o título da janela
 root.title("Widgets Avançados ")
-# Setting the size of the window
+# Definindo o tamanho da janela
 root.geometry("800x400")
-# Setting the background color of the window
+# Definindo a cor de fundo da janela
 root.configure(bg="lightgray")
 
-# Function to display the selected item from the listbox
+# Função para exibir o item selecionado da listbox
 def exibir_selecao():
-    # Getting the selected item from the listbox
+    # Obtendo o item selecionado da listbox
     selecionado = listbox.get(listbox.curselection())
-    # Updating the result label with the selected item
+    # Atualizando o rótulo de resultado com o item selecionado
     label_resultado.config(text=f"Você selecionou: {selecionado}")
 
 def exibir_opcoes():
-	linguagem = var_radio.get()
-	preferencias = []
-	if var_check1.get():
-		preferencias.append("Dark Mode")
-	if var_check2.get():
-		preferencias.append("Auto Save")
+    linguagem = var_radio.get()
+    preferencias = []
+    if var_check1.get():
+        preferencias.append("Dark Mode")
+    if var_check2.get():
+        preferencias.append("Auto Save")
 
-	label_opcoes.config(text=f"Linguagem: {linguagem}\nPreferências: {', '.join(preferencias)}")
+    # Atualizando o rótulo de opções com a linguagem e preferências selecionadas
+    label_opcoes.config(text=f"Linguagem: {linguagem}\nPreferências: {', '.join(preferencias)}")
 
-
-
-# Creating a label widget with the text "Selecione um item da Lista"
-# Setting the font to Arial, size 24, and background color to light gray
+# Criando um widget de rótulo com o texto "Selecione um item da Lista"
+# Definindo a fonte para Arial, tamanho 24, e cor de fundo para cinza claro
 label_titulo = tk.Label(root, text="Selecione um item da Lista", font=("Arial", 24), bg="lightgray")
-# Placing the label in the window with some padding
+# Colocando o rótulo na janela com algum espaçamento
 label_titulo.pack(pady=10)
 
-# Creating a frame to hold the listbox and its scrollbar
+# Criando um frame para conter a listbox e sua barra de rolagem
 frame_listbox = tk.Frame(root)
-# Placing the frame in the window with some padding
+# Colocando o frame na janela com algum espaçamento
 frame_listbox.pack(pady=10)
 
-# Creating a scrollbar widget and associating it with the frame
+# Criando um widget de barra de rolagem e associando-o ao frame
 scrollbar = tk.Scrollbar(frame_listbox, orient=tk.VERTICAL)
-# Creating a listbox widget and associating it with the frame
+# Criando um widget de listbox e associando-o ao frame
 listbox = tk.Listbox(frame_listbox, height=4, yscrollcommand=scrollbar.set, font=("Arial", 20), bg="white", fg="black", selectbackground="green", selectforeground="white", activestyle="dotbox")
 
-# Configuring the scrollbar to work with the listbox
+# Configurando a barra de rolagem para funcionar com a listbox
 scrollbar.config(command=listbox.yview)
-# Placing the scrollbar on the right side and making it fill the Y-axis
+# Colocando a barra de rolagem no lado direito e fazendo-a preencher o eixo Y
 scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
-# Placing the listbox on the left side and making it fill both X and Y axes
+# Colocando a listbox no lado esquerdo e fazendo-a preencher os eixos X e Y
 listbox.pack(side=tk.LEFT, fill=tk.BOTH)
 
-# Defining a dictionary with programming languages as keys and their emojis as values
-# The commented line shows an alternative list of items without emojis
+# Definindo um dicionário com linguagens de programação como chaves e seus emojis como valores
+# A linha comentada mostra uma lista alternativa de itens sem emojis
 itens = {"Python": "", "Java": "", "C++": "", "Ruby": "", "JavaScript": "", "Go": "", "Swift": "", "Kotlin": ""}
 #itens = ["Python", "Java", "C++", "Ruby", "JavaScript", "Go", "Swift", "Kotlin"]
 
-# Iterating over the dictionary items (language and emoji)
+# Iterando sobre os itens do dicionário (linguagem e emoji)
 for item, emoji in itens.items():
-    # Inserting each language and its emoji into the listbox
+    # Inserindo cada linguagem e seu emoji na listbox
     listbox.insert(tk.END, f"{item} {emoji}")
 
-# Creating a button widget labeled "Exibir Seleção"
-# Setting the font to Arial, size 18, background color to green, and text color to white
-# Associating the button with the exibir_selecao function to display the selected item
+# Criando um widget de botão rotulado "Exibir Seleção"
+# Definindo a fonte para Arial, tamanho 18, cor de fundo para verde, e cor do texto para branco
+# Associando o botão à função exibir_selecao para exibir o item selecionado
 botao_exibir = tk.Button(root, text="Exibir Seleção", font=("Arial", 18), bg="green", fg="white", command=exibir_selecao)
-# Placing the button in the window with some padding
+# Colocando o botão na janela com algum espaçamento
 botao_exibir.pack(pady=10)
 
-# Creating a label widget to display the result of the selection
-# Setting the font to Arial, size 12, and background color to light gray
+# Criando um widget de rótulo para exibir o resultado da seleção
+# Definindo a fonte para Arial, tamanho 12, e cor de fundo para cinza claro
 label_resultado = tk.Label(root, text="", font=("Arial", 12), bg="lightgray")
-# Placing the result label in the window with some padding
+# Colocando o rótulo de resultado na janela com algum espaçamento
 label_resultado.pack(pady=10)
 
 var_radio = tk.StringVar(value="Python")
@@ -82,8 +81,8 @@ label_radio = tk.Label(root, text="Escolha sua linguagem favorita:", font=("Aria
 label_radio.pack(pady=10)
 
 for linguagem in ["Python", "Java", "C++"]:
-	rb = tk.Radiobutton(root, text=linguagem, variable=var_radio, value=linguagem, bg="lightgray")
-	rb.pack(anchor=tk.CENTER)
+    rb = tk.Radiobutton(root, text=linguagem, variable=var_radio, value=linguagem, bg="lightgray")
+    rb.pack(anchor=tk.CENTER)
 
 var_check1 = tk.BooleanVar()
 var_check2 = tk.BooleanVar()
@@ -99,7 +98,5 @@ botao_opcoes.pack(pady=10, padx=10, anchor=tk.CENTER)
 label_opcoes = tk.Label(root, text="", font=("Arial", 12), bg="lightgray")
 label_opcoes.pack(pady='10', padx=10, anchor=tk.CENTER)
 
-
-
-# Starting the Tkinter event loop to run the application
+# Iniciando o loop de eventos do Tkinter para executar o aplicativo
 root.mainloop()
