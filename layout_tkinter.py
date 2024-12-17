@@ -21,6 +21,7 @@ label3.pack(side=tk.RIGHT, padx=10, fill=tk.Y)
 
 
 botao = tk.Button(root, text="Fechar", font=("Arial", 14), bg="orange", fg="white", command=root.destroy)
+
 botao.pack(pady=10, fill=tk.X)
 
 
