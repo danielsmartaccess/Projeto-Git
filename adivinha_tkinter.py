@@ -76,7 +76,7 @@ botao_reiniciar = tk.Button(root, text="Reiniciar", font=("Arial", 12), bg="blue
 botao_reiniciar.pack(pady=5)
 
 # Botão para encerrar o jogo
-botao_encerrar = tk.Button(root, text="Sair", font=("Arial", 12), bg="red", fg="white", command=encerrar_jogo)
+botao_encerrar = tk.Button(root, text="Sair", font=("Arial", 12), bg="red", fg="white", command= root.destroy)
 botao_encerrar.pack(pady=5)
 
 # Label para mostrar o número de tentativas
