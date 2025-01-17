@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Página inicial da aplicação Django">
+    <meta name="keywords" content="django, python, web application">
+    <title>Página Inicial</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .welcome-text {
+            text-align: center;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        .nav-menu {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .nav-menu a {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 0 10px;
+            text-decoration: none;
+            color: white;
+            background-color: #007bff;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .nav-menu a:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    {% load static %}
+    <div class="container">
+        <h1>Bem-vindo à minha aplicação Django!</h1>
+        <p class="welcome-text">Esta é uma aplicação web desenvolvida com Django Framework.</p>
+        <nav class="nav-menu">
+            <a href="{% url 'home' %}">Início</a>
+            <a href="{% url 'about' %}">Sobre</a>
+            <a href="{% url 'contact' %}">Contato</a>
+        </nav>
+    </div>
+</body>
+</html>
