@@ -14,17 +14,14 @@ try:
     #visualizar a base de dados
     pd.set_option('display.max_columns', None)
 
-
     #faturamento por loja
     faturamento = tabela_de_vendas[['ID Loja', 'Valor Final']].groupby('ID Loja').sum()
 
-
     #quantidade vendida por loja
     quantidade = tabela_de_vendas[['ID Loja', 'Quantidade']].groupby('ID Loja').sum()
-
-
     # Tikect médio por produto em cada loja
     ticket_medio = (faturamento['Valor Final'] / quantidade['Quantidade']).to_frame()
+    ticket_medio = ticket_medio.rename(columns={0: 'Ticket Médio'})
 
 
     # enviar email para as lojas
@@ -33,21 +30,20 @@ try:
     mail = outlook.CreateItem(0)
     mail.To = 'danielsteinbruch@gmail.com'
     mail.Subject = 'Teste Python Outlook'
-    mail.HTMLBody = '''
-Prezado,
+    mail.HTMLBody = f'''<p>Prezado,</p>
 
-Segue o relatório de vendas por loja:
+<p>Segue o relatório de vendas por loja:</p>
 
-Faturamento por loja:
-{}
+<p>Faturamento por loja:</p>
+{faturamento.to_html(formatters={'Valor Final': 'R${:,.2f}'.format})}
 
-Quantidade vendida por loja:
-{}
+<p>Quantidade vendida por loja:</p>
+{quantidade.to_html()}
 
-Ticket médio por loja:
-{}
+<p>Ticket médio por loja:</p>
+{ticket_medio.to_html(formatters={'Ticket Médio': 'R${:,.2f}'.format})}
 
-Atenciosamente,
+<p>Atenciosamente,</p>
 Sistema de Relatórios
 '''.format(faturamento.to_html(), quantidade.to_html(), ticket_medio.to_html())
     mail.Send()
