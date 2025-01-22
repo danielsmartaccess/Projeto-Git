@@ -20,5 +20,11 @@ from home import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('home/', views.home),
+    path('', views.index, name='index'),
+    path('login/', views.login_view, name='login'),
+    path('logout/', views.logout_view, name='logout'),
+    path('home/', views.home, name='home'),
+    path('cadastro/', views.cadastro, name='cadastro'),
+    path('consulta/', views.consulta, name='consulta'),
+    path('delete/<int:socio_id>/', views.delete_socio, name='delete_socio'),
 ]

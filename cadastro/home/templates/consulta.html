@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+
+{% block title %}Consulta de Sócios - Clube Privado{% endblock %}
+
+{% block extra_css %}
+<style>
+    .search-box {
+        margin-bottom: 2rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+        <h4 class="mb-0">Consulta de Sócios</h4>
+    </div>
+    <div class="card-body">
+        <div class="search-box">
+            <form method="get" class="row g-3">
+                <div class="col-md-4">
+                    <input type="text" class="form-control" name="search" placeholder="Buscar por nome ou CPF..." 
+                           value="{{ request.GET.search }}">
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select" name="tipo">
+                        <option value="">Todos os tipos</option>
+                        <option value="titular" {% if request.GET.tipo == 'titular' %}selected{% endif %}>Titular</option>
+                        <option value="dependente" {% if request.GET.tipo == 'dependente' %}selected{% endif %}>Dependente</option>
+                        <option value="convidado" {% if request.GET.tipo == 'convidado' %}selected{% endif %}>Convidado</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">Buscar</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>CPF</th>
+                        <th>Tipo</th>
+                        <th>Telefone</th>
+                        <th>Email</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for socio in socios %}
+                    <tr>
+                        <td>{{ socio.nome }}</td>
+                        <td>{{ socio.cpf }}</td>
+                        <td>{{ socio.get_tipo_socio_display }}</td>
+                        <td>{{ socio.telefone }}</td>
+                        <td>{{ socio.email }}</td>
+                        <td>
+                            <button type="button" class="btn btn-sm btn-info" data-bs-toggle="modal" 
+                                    data-bs-target="#detalhesModal{{ socio.id }}">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" 
+                                    data-bs-target="#deleteModal{{ socio.id }}">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+
+                    <!-- Modal de Detalhes -->
+                    <div class="modal fade" id="detalhesModal{{ socio.id }}" tabindex="-1">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Detalhes do Sócio</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p><strong>Nome:</strong> {{ socio.nome }}</p>
+                                    <p><strong>CPF:</strong> {{ socio.cpf }}</p>
+                                    <p><strong>Email:</strong> {{ socio.email }}</p>
+                                    <p><strong>Telefone:</strong> {{ socio.telefone }}</p>
+                                    <p><strong>Data de Nascimento:</strong> {{ socio.data_nascimento|date:"d/m/Y" }}</p>
+                                    <p><strong>Tipo de Sócio:</strong> {{ socio.get_tipo_socio_display }}</p>
+                                    <p><strong>Endereço:</strong> {{ socio.endereco }}</p>
+                                    <p><strong>Data de Cadastro:</strong> {{ socio.created_at|date:"d/m/Y H:i" }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modal de Exclusão -->
+                    <div class="modal fade" id="deleteModal{{ socio.id }}" tabindex="-1">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Confirmar Exclusão</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Tem certeza que deseja excluir o sócio <strong>{{ socio.nome }}</strong>?</p>
+                                    <p class="text-danger">Esta ação não pode ser desfeita.</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                    <form method="post" action="{% url 'delete_socio' socio.id %}" style="display: inline;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger">Confirmar Exclusão</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center">Nenhum sócio encontrado.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% if socios.has_other_pages %}
+        <nav aria-label="Navegação de páginas">
+            <ul class="pagination justify-content-center">
+                {% if socios.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ socios.previous_page_number }}&search={{ request.GET.search }}&tipo={{ request.GET.tipo }}">Anterior</a>
+                </li>
+                {% endif %}
+
+                {% for num in socios.paginator.page_range %}
+                    {% if socios.number == num %}
+                    <li class="page-item active">
+                        <span class="page-link">{{ num }}</span>
+                    </li>
+                    {% else %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ num }}&search={{ request.GET.search }}&tipo={{ request.GET.tipo }}">{{ num }}</a>
+                    </li>
+                    {% endif %}
+                {% endfor %}
+
+                {% if socios.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ socios.next_page_number }}&search={{ request.GET.search }}&tipo={{ request.GET.tipo }}">Próxima</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

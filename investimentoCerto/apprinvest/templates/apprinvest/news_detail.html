@@ -1,0 +1,108 @@
+{% extends 'apprinvest/base.html' %}
+
+{% block title %}{{ news.title }} - Investimento Certo{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'apprinvest:home' %}">Home</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'apprinvest:news_list' %}">Notícias</a></li>
+        {% if news.category %}
+        <li class="breadcrumb-item">
+            <a href="{% url 'apprinvest:news_list' %}?category={{ news.category.slug }}">
+                {{ news.category.name }}
+            </a>
+        </li>
+        {% endif %}
+        <li class="breadcrumb-item active">{{ news.title|truncatechars:50 }}</li>
+    </ol>
+</nav>
+
+<article class="card">
+    <div class="card-body">
+        <h1 class="card-title h2 mb-4">{{ news.title }}</h1>
+        
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="text-muted">
+                <small>
+                    <i class="fas fa-clock me-1"></i>{{ news.published_date|date:"d/m/Y H:i" }}
+                    <i class="fas fa-newspaper ms-3 me-1"></i>{{ news.source_name }}
+                    {% if news.category %}
+                    <i class="fas fa-tag ms-3 me-1"></i>{{ news.category.name }}
+                    {% endif %}
+                </small>
+            </div>
+            {% if news.source_url %}
+            <a href="{{ news.source_url }}" target="_blank" class="btn btn-outline-primary btn-sm">
+                Ver Fonte Original <i class="fas fa-external-link-alt ms-1"></i>
+            </a>
+            {% endif %}
+        </div>
+
+        <!-- Resumo da Notícia -->
+        <div class="card bg-light mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Resumo</h5>
+                <p class="card-text">{{ news.summary }}</p>
+            </div>
+        </div>
+
+        <!-- Conteúdo Principal -->
+        <div class="news-content">
+            {{ news.content|safe|linebreaks }}
+        </div>
+
+        {% if news.author %}
+        <div class="mt-4 text-muted">
+            <small>
+                <i class="fas fa-user me-1"></i>Por {{ news.author.get_full_name|default:news.author.username }}
+            </small>
+        </div>
+        {% endif %}
+    </div>
+</article>
+
+<!-- Notícias Relacionadas -->
+{% if related_news %}
+<div class="card mt-4">
+    <div class="card-header">
+        <h5 class="card-title mb-0">Notícias Relacionadas</h5>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            {% for related in related_news %}
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h6 class="card-title">
+                            <a href="{% url 'apprinvest:news_detail' related.slug %}" class="text-decoration-none">
+                                {{ related.title|truncatechars:100 }}
+                            </a>
+                        </h6>
+                        <p class="card-text">
+                            <small class="text-muted">
+                                <i class="fas fa-clock me-1"></i>{{ related.published_date|date:"d/m/Y" }}
+                            </small>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .news-content {
+        font-size: 1.1rem;
+        line-height: 1.8;
+    }
+    .news-content p {
+        margin-bottom: 1.5rem;
+    }
+</style>
+{% endblock %}

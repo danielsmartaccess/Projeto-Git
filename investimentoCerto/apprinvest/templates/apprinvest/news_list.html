@@ -1,0 +1,126 @@
+{% extends 'apprinvest/base.html' %}
+
+{% block title %}Notícias - Investimento Certo{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col">
+        <h2>Notícias Financeiras</h2>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Filtros e Categorias -->
+    <div class="col-md-3">
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-filter me-2"></i>Filtros
+                </h5>
+            </div>
+            <div class="card-body">
+                <h6 class="mb-3">Categorias</h6>
+                <div class="list-group">
+                    <a href="{% url 'apprinvest:news_list' %}" 
+                       class="list-group-item list-group-item-action {% if not request.GET.category %}active{% endif %}">
+                        Todas as Categorias
+                    </a>
+                    {% for category in view.categories %}
+                    <a href="?category={{ category.slug }}" 
+                       class="list-group-item list-group-item-action {% if request.GET.category == category.slug %}active{% endif %}">
+                        {{ category.name }}
+                    </a>
+                    {% endfor %}
+                </div>
+
+                <h6 class="mb-3 mt-4">Fontes</h6>
+                <div class="list-group">
+                    {% for source in view.sources %}
+                    <a href="?source={{ source.slug }}" 
+                       class="list-group-item list-group-item-action {% if request.GET.source == source.slug %}active{% endif %}">
+                        {{ source }}
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lista de Notícias -->
+    <div class="col-md-9">
+        {% if news_list %}
+            {% for news in news_list %}
+            <article class="card mb-4">
+                <div class="card-body">
+                    <h3 class="h4 card-title">
+                        <a href="{% url 'apprinvest:news_detail' news.slug %}" class="text-decoration-none">
+                            {{ news.title }}
+                        </a>
+                    </h3>
+                    <p class="text-muted mb-2">
+                        <small>
+                            <i class="fas fa-clock me-1"></i>{{ news.published_date|date:"d/m/Y H:i" }}
+                            <i class="fas fa-newspaper ms-2 me-1"></i>{{ news.source_name }}
+                            {% if news.category %}
+                            <i class="fas fa-tag ms-2 me-1"></i>{{ news.category.name }}
+                            {% endif %}
+                        </small>
+                    </p>
+                    <p class="card-text">{{ news.summary|truncatewords:50 }}</p>
+                    <a href="{% url 'apprinvest:news_detail' news.slug %}" class="btn btn-primary btn-sm">
+                        Ler mais
+                    </a>
+                    {% if news.source_url %}
+                    <a href="{{ news.source_url }}" target="_blank" class="btn btn-outline-secondary btn-sm ms-2">
+                        Fonte Original <i class="fas fa-external-link-alt ms-1"></i>
+                    </a>
+                    {% endif %}
+                </div>
+            </article>
+            {% endfor %}
+
+            <!-- Paginação -->
+            {% if is_paginated %}
+            <nav aria-label="Navegação de páginas">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}">
+                            <i class="fas fa-chevron-left"></i>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                        <li class="page-item active">
+                            <span class="page-link">{{ num }}</span>
+                        </li>
+                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ num }}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}">
+                                {{ num }}
+                            </a>
+                        </li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}">
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+
+        {% else %}
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle me-2"></i>Nenhuma notícia encontrada.
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

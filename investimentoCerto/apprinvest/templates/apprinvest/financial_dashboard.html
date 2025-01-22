@@ -1,0 +1,133 @@
+{% extends 'apprinvest/base.html' %}
+
+{% block title %}Dashboard Financeiro - Investimento Certo{% endblock %}
+
+{% block extra_css %}
+<style>
+    .indicator-card {
+        transition: transform 0.2s;
+    }
+    .indicator-card:hover {
+        transform: translateY(-5px);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col">
+        <h2 class="mb-4">Dashboard Financeiro</h2>
+        <p class="text-muted">
+            Última atualização: {{ last_update|date:"d/m/Y H:i:s" }}
+            <button id="refreshData" class="btn btn-sm btn-primary ms-2">
+                <i class="fas fa-sync-alt"></i> Atualizar
+            </button>
+        </p>
+    </div>
+</div>
+
+<!-- Principais Indicadores -->
+<div class="row mb-4">
+    {% for indicator in indicators %}
+    <div class="col-md-4 mb-4">
+        <div class="card indicator-card h-100">
+            <div class="card-body">
+                <h5 class="card-title">{{ indicator.name }}</h5>
+                <h2 class="mb-3">{{ indicator.current_value|floatformat:2 }}</h2>
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="badge {% if indicator.variation >= 0 %}bg-success{% else %}bg-danger{% endif %}">
+                        {% if indicator.variation >= 0 %}+{% endif %}{{ indicator.variation|floatformat:2 }}%
+                    </span>
+                    <small class="text-muted">{{ indicator.symbol }}</small>
+                </div>
+                <div class="mt-4">
+                    <canvas id="chart-{{ indicator.symbol|slugify }}" width="400" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Gráfico Comparativo -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Análise Comparativa</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="comparison-chart" width="400" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Configuração dos gráficos individuais
+    {% for indicator in indicators %}
+    fetch(`/api/indicator/{{ indicator.symbol }}/`)
+        .then(response => response.json())
+        .then(data => {
+            const ctx = document.getElementById('chart-{{ indicator.symbol|slugify }}').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.labels,
+                    datasets: [{
+                        label: '{{ indicator.name }}',
+                        data: data.values,
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false
+                        }
+                    }
+                }
+            });
+        });
+    {% endfor %}
+
+    // Gráfico comparativo
+    const comparisonCtx = document.getElementById('comparison-chart').getContext('2d');
+    new Chart(comparisonCtx, {
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: []
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: false
+                }
+            }
+        }
+    });
+
+    // Atualização automática
+    document.getElementById('refreshData').addEventListener('click', function() {
+        location.reload();
+    });
+});
+</script>
+{% endblock %}
