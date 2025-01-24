@@ -1,0 +1,19 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualização do Produto</title>
+    <link rel="stylesheet" href="{% static 'produtos/css/ver_produto.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>Detalhes do Produto</h1>
+        <div class="produto-info">
+            <p class="produto-nome">Nome do Produto: {{ nome }}</p>
+        </div>
+    </div>
+</body>
+</html>
