@@ -13,6 +13,17 @@
         <h1>Detalhes do Produto</h1>
         <div class="produto-info">
             <p class="produto-nome">Nome do Produto: {{ nome }}</p>
+            <img class="produto-imagem" src="{% static 'produtos/img/morango.png' %}" alt="Imagem do Produto" Width="50px" Height="50px">
+            
+            <form action="{% url 'ver_produto' %}" method="POST">{% csrf_token %}
+                <input type="text" name="nome" placeholder="Digite seu nome">
+                <br>
+                <br>
+                <input type="number" name="idade" placeholder="Digite sua idade">
+                <br>
+                <br> 
+                <input type="submit" value="Enviar">
+            </form>
         </div>
     </div>
 </body>
