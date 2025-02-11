@@ -1,0 +1,3 @@
+Exercício Extra: Micro SaaS com Django (Tempo sugerido: 45 minutos)
+
+Descrição: Crie um micro SaaS simples usando Django que permita a gestão de assinaturas de usuários.

@@ -1,0 +1,63 @@
+:root {
+    --bg-color: #ffffff;
+    --text-color: #333333;
+    --cell-color: #f0f0f0;
+    --border-color: #333333;
+}
+
+[data-theme="dark"] {
+    --bg-color: #333333;
+    --text-color: #ffffff;
+    --cell-color: #444444;
+    --border-color: #ffffff;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: Arial, sans-serif;
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s;
+}
+
+.container {
+    text-align: center;
+}
+
+.board {
+    display: grid;
+    grid-template-columns: repeat(3, 100px);
+    gap: 5px;
+    margin: 20px auto;
+}
+
+.cell {
+    width: 100px;
+    height: 100px;
+    background: var(--cell-color);
+    border: 2px solid var(--border-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 40px;
+    cursor: pointer;
+}
+
+button {
+    padding: 10px 20px;
+    margin: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    background: var(--cell-color);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+}
+
+.status {
+    font-size: 20px;
+    margin: 20px 0;
+}
