@@ -1,0 +1,76 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Categorias{% endblock %}
+
+{% block content %}
+<div class="content-wrapper">
+    <div class="content-header">
+        <h1>Categorias</h1>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
+            <i class="fas fa-plus"></i> Nova Categoria
+        </button>
+    </div>
+
+    <div class="content">
+        <div class="categories-grid">
+            {% for category in categories %}
+            <div class="category-card">
+                <div class="category-icon">
+                    <i class="fas fa-{{ category.icon|default:'tag' }}"></i>
+                </div>
+                <div class="category-info">
+                    <h3>{{ category.name }}</h3>
+                    <p>{{ category.description|default:'' }}</p>
+                </div>
+                <div class="category-actions">
+                    <button class="btn btn-sm btn-outline-primary edit-category" data-id="{{ category.id }}">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger delete-category" data-id="{{ category.id }}">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+            {% empty %}
+            <div class="empty-state">
+                <i class="fas fa-tags"></i>
+                <p>Nenhuma categoria encontrada</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Modal para adicionar categoria -->
+<div class="modal fade" id="addCategoryModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Nova Categoria</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="categoryForm">
+                    <div class="mb-3">
+                        <label class="form-label">Nome</label>
+                        <input type="text" class="form-control" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Descrição</label>
+                        <textarea class="form-control" name="description"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Ícone</label>
+                        <input type="text" class="form-control" name="icon" placeholder="Ex: tag, shopping-cart">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="saveCategory">Salvar</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

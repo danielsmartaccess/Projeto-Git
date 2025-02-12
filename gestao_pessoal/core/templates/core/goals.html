@@ -1,0 +1,92 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Metas{% endblock %}
+
+{% block content %}
+<div class="content-wrapper">
+    <div class="content-header">
+        <h1>Metas</h1>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addGoalModal">
+            <i class="fas fa-plus"></i> Nova Meta
+        </button>
+    </div>
+
+    <div class="content">
+        <div class="goals-grid">
+            {% for goal in goals %}
+            <div class="goal-card">
+                <div class="goal-header">
+                    <h3>{{ goal.title }}</h3>
+                    <span class="deadline">{{ goal.deadline|date:"d/m/Y" }}</span>
+                </div>
+                <div class="goal-body">
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" 
+                             style="width: {{ goal.progress }}%"
+                             aria-valuenow="{{ goal.progress }}" 
+                             aria-valuemin="0" 
+                             aria-valuemax="100">
+                            {{ goal.progress }}%
+                        </div>
+                    </div>
+                    <div class="goal-amount">
+                        <p>Meta: R$ {{ goal.target_amount|floatformat:2 }}</p>
+                        <p>Atual: R$ {{ goal.current_amount|floatformat:2 }}</p>
+                    </div>
+                    <div class="goal-actions">
+                        <button class="btn btn-sm btn-outline-primary edit-goal" data-id="{{ goal.id }}">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger delete-goal" data-id="{{ goal.id }}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="empty-state">
+                <i class="fas fa-bullseye"></i>
+                <p>Nenhuma meta cadastrada</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Modal para adicionar meta -->
+<div class="modal fade" id="addGoalModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Nova Meta</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="goalForm">
+                    <div class="mb-3">
+                        <label class="form-label">Título</label>
+                        <input type="text" class="form-control" name="title" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Descrição</label>
+                        <textarea class="form-control" name="description"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Valor da Meta</label>
+                        <input type="number" class="form-control" name="target_amount" step="0.01" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Data Limite</label>
+                        <input type="date" class="form-control" name="deadline" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="saveGoal">Salvar</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

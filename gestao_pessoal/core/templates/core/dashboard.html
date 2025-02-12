@@ -1,0 +1,223 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="content-wrapper">
+    <div class="content-header">
+        <h1>Dashboard</h1>
+    </div>
+
+    <div class="content">
+        <!-- Resumo Financeiro -->
+        <div class="financial-summary">
+            <div class="summary-card income">
+                <div class="card-icon">
+                    <i class="fas fa-arrow-up"></i>
+                </div>
+                <div class="card-content">
+                    <h3>Receitas</h3>
+                    <p class="amount">R$ {{ total_income|default:"0,00" }}</p>
+                    <p class="period">Este mês</p>
+                </div>
+            </div>
+
+            <div class="summary-card expenses">
+                <div class="card-icon">
+                    <i class="fas fa-arrow-down"></i>
+                </div>
+                <div class="card-content">
+                    <h3>Despesas</h3>
+                    <p class="amount">R$ {{ total_expenses|default:"0,00" }}</p>
+                    <p class="period">Este mês</p>
+                </div>
+            </div>
+
+            <div class="summary-card balance">
+                <div class="card-icon">
+                    <i class="fas fa-wallet"></i>
+                </div>
+                <div class="card-content">
+                    <h3>Saldo</h3>
+                    <p class="amount">R$ {{ balance|default:"0,00" }}</p>
+                    <p class="period">Este mês</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <!-- Transações Recentes -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3>Transações Recentes</h3>
+                    <a href="{% url 'transactions' %}" class="btn btn-sm btn-outline-primary">Ver Todas</a>
+                </div>
+                <div class="card-body">
+                    {% if recent_transactions %}
+                    <div class="transactions-list">
+                        {% for transaction in recent_transactions %}
+                        <div class="transaction-item">
+                            <div class="transaction-icon">
+                                <i class="fas fa-{% if transaction.type == 'income' %}plus{% else %}minus{% endif %}"></i>
+                            </div>
+                            <div class="transaction-details">
+                                <h4>{{ transaction.description }}</h4>
+                                <p>{{ transaction.category.name }}</p>
+                            </div>
+                            <div class="transaction-amount {% if transaction.type == 'income' %}income{% else %}expense{% endif %}">
+                                R$ {{ transaction.amount|floatformat:2 }}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="empty-state">
+                        <p>Nenhuma transação recente</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Contas a Pagar -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3>Contas a Pagar</h3>
+                    <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#addBillModal">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+                <div class="card-body">
+                    {% if upcoming_bills %}
+                    <div class="bills-list">
+                        {% for bill in upcoming_bills %}
+                        <div class="bill-item">
+                            <div class="bill-details">
+                                <h4>{{ bill.description }}</h4>
+                                <p>Vence em {{ bill.due_date|date:"d/m/Y" }}</p>
+                            </div>
+                            <div class="bill-amount">
+                                R$ {{ bill.amount|floatformat:2 }}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="empty-state">
+                        <p>Nenhuma conta a pagar</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Metas -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3>Metas</h3>
+                    <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#addGoalModal">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+                <div class="card-body">
+                    {% if goals %}
+                    <div class="goals-list">
+                        {% for goal in goals %}
+                        <div class="goal-item">
+                            <div class="goal-info">
+                                <h4>{{ goal.title }}</h4>
+                                <div class="progress">
+                                    <div class="progress-bar" role="progressbar" 
+                                         style="width: {{ goal.progress }}%"
+                                         aria-valuenow="{{ goal.progress }}" 
+                                         aria-valuemin="0" 
+                                         aria-valuemax="100">
+                                        {{ goal.progress }}%
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="goal-amount">
+                                <p>Meta: R$ {{ goal.target_amount|floatformat:2 }}</p>
+                                <p>Atual: R$ {{ goal.current_amount|floatformat:2 }}</p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="empty-state">
+                        <p>Nenhuma meta definida</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para adicionar conta -->
+<div class="modal fade" id="addBillModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Nova Conta a Pagar</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="billForm">
+                    <div class="mb-3">
+                        <label class="form-label">Descrição</label>
+                        <input type="text" class="form-control" name="description" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Valor</label>
+                        <input type="number" class="form-control" name="amount" step="0.01" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Data de Vencimento</label>
+                        <input type="date" class="form-control" name="due_date" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="saveBill">Salvar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para adicionar meta -->
+<div class="modal fade" id="addGoalModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Nova Meta</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="goalForm">
+                    <div class="mb-3">
+                        <label class="form-label">Título</label>
+                        <input type="text" class="form-control" name="title" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Descrição</label>
+                        <textarea class="form-control" name="description"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Valor da Meta</label>
+                        <input type="number" class="form-control" name="target_amount" step="0.01" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Data Limite</label>
+                        <input type="date" class="form-control" name="deadline" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="saveGoal">Salvar</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

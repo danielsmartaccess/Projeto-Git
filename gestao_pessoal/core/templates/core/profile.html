@@ -1,0 +1,139 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Meu Perfil{% endblock %}
+
+{% block content %}
+<div class="content-wrapper">
+    <div class="content-header">
+        <h1>Meu Perfil</h1>
+    </div>
+
+    <div class="content">
+        <div class="profile-container">
+            <div class="profile-header">
+                <div class="profile-avatar">
+                    <i class="fas fa-user-circle fa-5x"></i>
+                </div>
+                <div class="profile-info">
+                    <h2>{{ user.get_full_name|default:user.username }}</h2>
+                    <p>{{ user.email }}</p>
+                </div>
+            </div>
+
+            <div class="profile-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Informações Pessoais</h3>
+                        <button class="btn btn-sm btn-outline-primary" id="editProfile">
+                            <i class="fas fa-edit"></i> Editar
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <form id="profileForm" class="profile-form">
+                            <div class="mb-3">
+                                <label class="form-label">Nome</label>
+                                <input type="text" class="form-control" name="first_name" value="{{ user.first_name }}" disabled>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Sobrenome</label>
+                                <input type="text" class="form-control" name="last_name" value="{{ user.last_name }}" disabled>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-control" name="email" value="{{ user.email }}" disabled>
+                            </div>
+                            <div class="form-actions" style="display: none;">
+                                <button type="button" class="btn btn-secondary" id="cancelEdit">Cancelar</button>
+                                <button type="submit" class="btn btn-primary">Salvar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h3>Segurança</h3>
+                    </div>
+                    <div class="card-body">
+                        <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#changePasswordModal">
+                            <i class="fas fa-key"></i> Alterar Senha
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h3>Preferências</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="emailNotifications">
+                            <label class="form-check-label" for="emailNotifications">
+                                Receber notificações por email
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para alterar senha -->
+<div class="modal fade" id="changePasswordModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Alterar Senha</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="changePasswordForm">
+                    <div class="mb-3">
+                        <label class="form-label">Senha Atual</label>
+                        <input type="password" class="form-control" name="current_password" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Nova Senha</label>
+                        <input type="password" class="form-control" name="new_password" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Confirmar Nova Senha</label>
+                        <input type="password" class="form-control" name="confirm_password" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="savePassword">Salvar</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.getElementById('editProfile').addEventListener('click', function() {
+    const form = document.getElementById('profileForm');
+    const inputs = form.querySelectorAll('input');
+    const actions = form.querySelector('.form-actions');
+    
+    inputs.forEach(input => input.disabled = false);
+    actions.style.display = 'block';
+    this.style.display = 'none';
+});
+
+document.getElementById('cancelEdit').addEventListener('click', function() {
+    const form = document.getElementById('profileForm');
+    const inputs = form.querySelectorAll('input');
+    const actions = form.querySelector('.form-actions');
+    const editButton = document.getElementById('editProfile');
+    
+    inputs.forEach(input => input.disabled = true);
+    actions.style.display = 'none';
+    editButton.style.display = 'block';
+});
+</script>
+{% endblock %}

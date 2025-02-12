@@ -1,0 +1,87 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Tarefas{% endblock %}
+
+{% block content %}
+<div class="content-wrapper">
+    <div class="content-header">
+        <h1>Tarefas</h1>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addTaskModal">
+            <i class="fas fa-plus"></i> Nova Tarefa
+        </button>
+    </div>
+
+    <div class="content">
+        <div class="tasks-list">
+            {% for task in tasks %}
+            <div class="task-card {% if task.completed %}completed{% endif %}">
+                <div class="task-checkbox">
+                    <input type="checkbox" class="task-status" 
+                           data-id="{{ task.id }}" 
+                           {% if task.completed %}checked{% endif %}>
+                </div>
+                <div class="task-content">
+                    <h3>{{ task.title }}</h3>
+                    <p>{{ task.description }}</p>
+                    {% if task.due_date %}
+                    <span class="due-date">Vence em: {{ task.due_date|date:"d/m/Y" }}</span>
+                    {% endif %}
+                </div>
+                <div class="task-actions">
+                    <button class="btn btn-sm btn-outline-primary edit-task" data-id="{{ task.id }}">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger delete-task" data-id="{{ task.id }}">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+            {% empty %}
+            <div class="empty-state">
+                <i class="fas fa-tasks"></i>
+                <p>Nenhuma tarefa encontrada</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Modal para adicionar tarefa -->
+<div class="modal fade" id="addTaskModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Nova Tarefa</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="taskForm">
+                    <div class="mb-3">
+                        <label class="form-label">Título</label>
+                        <input type="text" class="form-control" name="title" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Descrição</label>
+                        <textarea class="form-control" name="description"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Data de Vencimento</label>
+                        <input type="date" class="form-control" name="due_date">
+                    </div>
+                    <div class="mb-3">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" name="completed" id="taskCompleted">
+                            <label class="form-check-label" for="taskCompleted">Tarefa Concluída</label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="saveTask">Salvar</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

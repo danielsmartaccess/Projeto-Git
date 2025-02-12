@@ -1,0 +1,88 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Cartões de Crédito{% endblock %}
+
+{% block content %}
+<div class="content-wrapper">
+    <div class="content-header">
+        <h1>Cartões de Crédito</h1>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCreditCardModal">
+            <i class="fas fa-plus"></i> Novo Cartão
+        </button>
+    </div>
+
+    <div class="content">
+        <div class="credit-cards-grid">
+            {% for card in credit_cards %}
+            <div class="credit-card">
+                <div class="card-header">
+                    <h3>{{ card.name }}</h3>
+                    <div class="card-number">**** **** **** {{ card.last_digits }}</div>
+                </div>
+                <div class="card-body">
+                    <div class="card-info">
+                        <p><strong>Limite:</strong> R$ {{ card.credit_limit|floatformat:2 }}</p>
+                        <p><strong>Vencimento:</strong> Dia {{ card.due_day }}</p>
+                        <p><strong>Fechamento:</strong> Dia {{ card.closing_day }}</p>
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn btn-sm btn-outline-primary edit-card" data-id="{{ card.id }}">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger delete-card" data-id="{{ card.id }}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="empty-state">
+                <i class="fas fa-credit-card"></i>
+                <p>Nenhum cartão cadastrado</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Modal para adicionar cartão -->
+<div class="modal fade" id="addCreditCardModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Novo Cartão de Crédito</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="creditCardForm">
+                    <div class="mb-3">
+                        <label class="form-label">Nome do Cartão</label>
+                        <input type="text" class="form-control" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Últimos 4 dígitos</label>
+                        <input type="text" class="form-control" name="last_digits" maxlength="4" pattern="\d{4}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Limite de Crédito</label>
+                        <input type="number" class="form-control" name="credit_limit" step="0.01" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Dia do Vencimento</label>
+                        <input type="number" class="form-control" name="due_day" min="1" max="31" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Dia do Fechamento</label>
+                        <input type="number" class="form-control" name="closing_day" min="1" max="31" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="saveCreditCard">Salvar</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,13 +1,5 @@
 import flet as ft
-from models import Produto
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-
-CONN = "sqlite:///prpojeto2.db"
-
-engine = create_engine(CONN, echo = True)
-Session = sessionmaker(bind=engine)
-session = Session()
+from models import Produto, session
 
 def main(page: ft.Page):
 

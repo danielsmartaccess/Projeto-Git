@@ -1,0 +1,88 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Transações{% endblock %}
+
+{% block content %}
+<div class="content-wrapper">
+    <div class="content-header">
+        <h1>Transações</h1>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addTransactionModal">
+            <i class="fas fa-plus"></i> Nova Transação
+        </button>
+    </div>
+
+    <div class="content">
+        <div class="transactions-list">
+            {% for transaction in transactions %}
+            <div class="transaction-card">
+                <div class="transaction-header">
+                    <h3>{{ transaction.description }}</h3>
+                    <span class="date">{{ transaction.date|date:"d/m/Y" }}</span>
+                </div>
+                <div class="transaction-body">
+                    <div class="amount {% if transaction.type == 'income' %}income{% else %}expense{% endif %}">
+                        R$ {{ transaction.amount|floatformat:2 }}
+                    </div>
+                    <div class="category">
+                        <i class="fas fa-tag"></i> {{ transaction.category.name }}
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="empty-state">
+                <i class="fas fa-receipt"></i>
+                <p>Nenhuma transação encontrada</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Modal para adicionar transação -->
+<div class="modal fade" id="addTransactionModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Nova Transação</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="transactionForm">
+                    <div class="mb-3">
+                        <label class="form-label">Descrição</label>
+                        <input type="text" class="form-control" name="description" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Valor</label>
+                        <input type="number" class="form-control" name="amount" step="0.01" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Tipo</label>
+                        <select class="form-control" name="type" required>
+                            <option value="income">Receita</option>
+                            <option value="expense">Despesa</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Categoria</label>
+                        <select class="form-control" name="category" required>
+                            {% for category in categories %}
+                            <option value="{{ category.id }}">{{ category.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Data</label>
+                        <input type="date" class="form-control" name="date" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="saveTransaction">Salvar</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

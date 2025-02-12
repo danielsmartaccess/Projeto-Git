@@ -1,0 +1,94 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Lista de Desejos{% endblock %}
+
+{% block content %}
+<div class="content-wrapper">
+    <div class="content-header">
+        <h1>Lista de Desejos</h1>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addWishlistItemModal">
+            <i class="fas fa-plus"></i> Novo Item
+        </button>
+    </div>
+
+    <div class="content">
+        <div class="wishlist-grid">
+            {% for item in wishlist_items %}
+            <div class="wishlist-card">
+                <div class="item-image">
+                    {% if item.image_url %}
+                    <img src="{{ item.image_url }}" alt="{{ item.name }}">
+                    {% else %}
+                    <i class="fas fa-gift"></i>
+                    {% endif %}
+                </div>
+                <div class="item-content">
+                    <h3>{{ item.name }}</h3>
+                    <p class="price">R$ {{ item.price|floatformat:2 }}</p>
+                    <p class="description">{{ item.description }}</p>
+                    {% if item.url %}
+                    <a href="{{ item.url }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                        <i class="fas fa-external-link-alt"></i> Ver Site
+                    </a>
+                    {% endif %}
+                </div>
+                <div class="item-actions">
+                    <button class="btn btn-sm btn-outline-primary edit-item" data-id="{{ item.id }}">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger delete-item" data-id="{{ item.id }}">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+            {% empty %}
+            <div class="empty-state">
+                <i class="fas fa-heart"></i>
+                <p>Sua lista de desejos está vazia</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Modal para adicionar item -->
+<div class="modal fade" id="addWishlistItemModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Novo Item na Lista de Desejos</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="wishlistItemForm">
+                    <div class="mb-3">
+                        <label class="form-label">Nome do Item</label>
+                        <input type="text" class="form-control" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Descrição</label>
+                        <textarea class="form-control" name="description"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Preço</label>
+                        <input type="number" class="form-control" name="price" step="0.01" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">URL do Produto</label>
+                        <input type="url" class="form-control" name="url">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">URL da Imagem</label>
+                        <input type="url" class="form-control" name="image_url">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="saveWishlistItem">Salvar</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
