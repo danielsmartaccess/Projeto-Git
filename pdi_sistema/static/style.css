@@ -1,0 +1,82 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.campo {
+    margin-bottom: 20px;
+}
+
+label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+}
+
+textarea, input[type="text"], input[type="email"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+input[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+input[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.intro {
+    margin-bottom: 30px;
+    color: #666;
+}
+
+.radio-group {
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.radio-group input[type="radio"] {
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.prioridades {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.prioridade-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.prioridade-item input {
+    width: 60px;
+}
+
+.alert {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+}

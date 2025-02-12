@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Descobrindo Seus Valores</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Descobrindo Seus Valores</h1>
+        <p class="intro">Este questionário foi criado para ajudá-lo a reconhecer seus valores mais importantes de forma divertida e reflexiva. Responda sem pensar muito e divirta-se!</p>
+        
+        <form method="POST" action="{{ url_for('submit') }}">
+            <div class="campo">
+                <label>Email *</label>
+                <input type="email" name="email" required>
+            </div>
+
+            <div class="campo">
+                <label>Qual dessas frases você sente que mais representa sua forma de ver a vida? *</label>
+                <div class="radio-group">
+                    <input type="radio" name="visao_vida" value="competitivo" required> O mundo é um grande jogo e eu gosto de vencer.<br>
+                    <input type="radio" name="visao_vida" value="jornada"> O importante é o caminho, não o destino.<br>
+                    <input type="radio" name="visao_vida" value="conexoes"> Conexões e relações humanas são tudo.<br>
+                    <input type="radio" name="visao_vida" value="estabilidade"> Prefiro estabilidade e segurança acima de tudo.
+                </div>
+            </div>
+
+            <div class="campo">
+                <label>Imagine que você ganhou um ano sabático para fazer o que quiser. O que escolheria? *</label>
+                <div class="radio-group">
+                    <input type="radio" name="sabatico" value="explorar" required> Viajar pelo mundo e explorar culturas.<br>
+                    <input type="radio" name="sabatico" value="social"> Criar um projeto social para impactar vidas.<br>
+                    <input type="radio" name="sabatico" value="investir"> Investir em um novo negócio ou aprendizado.<br>
+                    <input type="radio" name="sabatico" value="familia"> Passar tempo com família e amigos.
+                </div>
+            </div>
+
+            <div class="campo">
+                <label>Na sua visão, o que é mais importante para alcançar o sucesso? *</label>
+                <div class="radio-group">
+                    <input type="radio" name="sucesso" value="criatividade" required> Criatividade e inovação.<br>
+                    <input type="radio" name="sucesso" value="disciplina"> Trabalho árduo e disciplina.<br>
+                    <input type="radio" name="sucesso" value="networking"> Relacionamento e networking.<br>
+                    <input type="radio" name="sucesso" value="proposito"> Paixão e propósito.
+                </div>
+            </div>
+
+            <div class="campo">
+                <label>Se você tivesse que escolher um superpoder, qual seria? *</label>
+                <div class="radio-group">
+                    <input type="radio" name="superpoder" value="cura" required> Ser capaz de curar qualquer pessoa.<br>
+                    <input type="radio" name="superpoder" value="tempo"> Poder viajar no tempo e aprender tudo.<br>
+                    <input type="radio" name="superpoder" value="imortal"> Ser imortal e viver todas as experiências.<br>
+                    <input type="radio" name="superpoder" value="invisivel"> Ser invisível para entender as pessoas melhor.
+                </div>
+            </div>
+
+            <div class="campo">
+                <label>Você tem R$1 milhão para investir em um único propósito. O que faria? *</label>
+                <div class="radio-group">
+                    <input type="radio" name="investimento" value="fundacao" required> Criaria uma fundação para ajudar quem precisa.<br>
+                    <input type="radio" name="investimento" value="empresa"> Abriria uma empresa inovadora.<br>
+                    <input type="radio" name="investimento" value="estabilidade"> Usaria para garantir estabilidade financeira.<br>
+                    <input type="radio" name="investimento" value="viagem"> Viajaria e aproveitaria a vida.
+                </div>
+            </div>
+
+            <div class="campo">
+                <label>Escala de prioridade: Organize os itens conforme sua importância *</label>
+                <div class="prioridades">
+                    <div class="prioridade-item">
+                        <label>Realização Profissional</label>
+                        <input type="number" name="prio_realizacao" min="1" max="5" required>
+                    </div>
+                    <div class="prioridade-item">
+                        <label>Família e Relacionamentos</label>
+                        <input type="number" name="prio_familia" min="1" max="5" required>
+                    </div>
+                    <div class="prioridade-item">
+                        <label>Liberdade e Independência</label>
+                        <input type="number" name="prio_liberdade" min="1" max="5" required>
+                    </div>
+                    <div class="prioridade-item">
+                        <label>Contribuição Social</label>
+                        <input type="number" name="prio_contribuicao" min="1" max="5" required>
+                    </div>
+                    <div class="prioridade-item">
+                        <label>Conhecimento e Crescimento Pessoal</label>
+                        <input type="number" name="prio_conhecimento" min="1" max="5" required>
+                    </div>
+                </div>
+            </div>
+
+            <input type="submit" value="Enviar">
+        </form>
+    </div>
+</body>
+</html>
